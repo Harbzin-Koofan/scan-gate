@@ -8,9 +8,9 @@ import { QRCodeComponent } from 'angularx-qrcode';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @Component({
@@ -48,65 +48,73 @@ export class CodeGeneratorComponent {
   async downloadOutputZip() {
     if (this.numberOfTicketsCtr.valid) {
       const zip = new JSZip();
-      let ticketImageUrl
-      let xPosition
-      let yPosition
-      let size
+      let ticketImageUrl;
+      let xPosition;
+      let yPosition;
+      let size;
 
-      if(this.isForAdult){
+      if (this.isForAdult) {
         ticketImageUrl = 'adults.png';
-        xPosition = 68
-        yPosition = 166
-        size = 218
-      }else {
+        xPosition = 68;
+        yPosition = 166;
+        size = 218;
+      } else {
         ticketImageUrl = 'kids.png';
-        xPosition = 1744
-        yPosition = 181
-        size = 212
+        xPosition = 1744;
+        yPosition = 181;
+        size = 212;
       }
 
       for (let i = 0; i < this.qrDataList.length; i++) {
         const qrCodeElement = this.qrCanvasList.toArray()[i] as any;
-        console.log(this.qrCanvasList.length)
+        console.log(this.qrCanvasList.length);
         const qrCanvas = qrCodeElement.qrcElement.nativeElement.children[0] as HTMLCanvasElement;
 
         // Load ticket image
         const ticketImage = await this.loadImage(ticketImageUrl);
 
-        // Create a new canvas to merge the ticket & QR code
-        const finalCanvas = document.createElement('canvas');
-        finalCanvas.width = ticketImage.width;
-        finalCanvas.height = ticketImage.height;
-        const ctx = finalCanvas.getContext('2d')!;
+        // Step 1: Draw Ticket First on a Temporary Canvas
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = ticketImage.width;
+        tempCanvas.height = ticketImage.height;
+        const tempCtx = tempCanvas.getContext('2d')!;
 
-        // Draw ticket background
-        ctx.drawImage(ticketImage, 0, 0, finalCanvas.width, finalCanvas.height);
+        // Draw ticket background first
+        tempCtx.drawImage(ticketImage, 0, 0, tempCanvas.width, tempCanvas.height);
 
-        // Draw QR code at the correct position
-        const qrX = xPosition; // Adjust X based on QR position
-        const qrY = yPosition; // Adjust Y based on QR position
-        const qrSize = size; // Adjust size based on ticket layout
+        // Step 2: Overlay QR Code onto Ticket
+        tempCtx.drawImage(qrCanvas, xPosition, yPosition, size, size);
 
-        ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+        // Step 3: Rotate the Final Merged Image
+        const rotatedCanvas = document.createElement('canvas');
+        rotatedCanvas.width = tempCanvas.height; // Swap width & height
+        rotatedCanvas.height = tempCanvas.width;
+        const rotatedCtx = rotatedCanvas.getContext('2d')!;
 
-        // Convert merged canvas to Blob
+        // Rotate 90° clockwise
+        rotatedCtx.translate(rotatedCanvas.width, 0);
+        rotatedCtx.rotate(90 * Math.PI / 180);
+
+        // Draw rotated image onto new canvas
+        rotatedCtx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Convert merged and rotated canvas to Blob
         const blob = await new Promise<Blob>((resolve) => {
-          finalCanvas.toBlob((b) => resolve(b!), 'image/png');
+          rotatedCanvas.toBlob((b) => resolve(b!), 'image/png');
         });
 
-        zip.file(`${this.isForAdult?'Adult':'Kid'} ticket-${i + 1}.png`, blob);
+        zip.file(`${this.isForAdult ? 'Adult' : 'Kid'} ticket-${i + 1}.png`, blob);
       }
 
       // Generate and trigger download
       zip.generateAsync({ type: 'blob' }).then((content: string | Blob) => {
         const now = new Date();
-        const formattedDateTime = this.datePipe.transform(now, 'EEEE, MMMM d, y h:mm a') || ''
-        saveAs(content, `KH ${this.isForAdult?'Adults':'Kids'} Tickets ${formattedDateTime}.zip`);
-        this.isTicketsGenerated = false
-        this.numberOfTicketsCtr.reset()
-        this.qrDataList = []
+        const formattedDateTime = this.datePipe.transform(now, 'EEEE, MMMM d, y h:mm a') || '';
+        saveAs(content, `KH ${this.isForAdult ? 'Adults' : 'Kids'} Tickets ${formattedDateTime}.zip`);
+        this.isTicketsGenerated = false;
+        this.numberOfTicketsCtr.reset();
+        this.qrDataList = [];
       });
-
     }
   }
 

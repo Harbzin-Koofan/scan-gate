@@ -69,11 +69,11 @@ export class CodeScannerComponent {
             }
           } else {
             console.log('Cannot Enter')
-            this.cannotEnter = true
+            // this.cannotEnter = true
           }
         } else {
           console.log('Cannot Enter')
-          this.cannotEnter = true
+          // this.cannotEnter = true
         }
         this.hideScanner = false
         this.scannerStarted = false

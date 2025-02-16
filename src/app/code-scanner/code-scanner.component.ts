@@ -6,7 +6,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
 @Component({
@@ -26,7 +26,7 @@ export class CodeScannerComponent {
   isLoading = false
   subscription!: Subscription
 
-  constructor(private router:Router){}
+  constructor(private router: Router) { }
 
   ngOnDestroy() {
     if (this.subscription) {
@@ -60,12 +60,16 @@ export class CodeScannerComponent {
               if (result) {
                 console.log('Can Enter')
                 this.canEnter = true
+                this.isLoading = false
+
               } else {
                 alert('Something went wrong')
               }
             } else {
               console.log('Already used')
               this.alreadyUsed = true
+              this.isLoading = false
+
             }
           } else {
             console.log('Cannot Enter')
@@ -77,7 +81,6 @@ export class CodeScannerComponent {
         }
         this.hideScanner = false
         this.scannerStarted = false
-        this.isLoading = false
       });
     }
 
@@ -97,7 +100,7 @@ export class CodeScannerComponent {
     this.alreadyUsed = false
   }
 
-  back(){
+  back() {
     this.scannerStarted = false
     this.canEnter = false
     this.cannotEnter = false

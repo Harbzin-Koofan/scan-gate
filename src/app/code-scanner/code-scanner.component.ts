@@ -42,53 +42,49 @@ export class CodeScannerComponent {
       this.hideScanner = true
       const client = generateClient<Schema>();
       // get a specific item
-      this.subscription = client.models.Todo.observeQuery({
+      const { data: todos, errors } = await client.models.Todo.list({
         filter: {
           guid: { eq: guid }
         }
-      }).subscribe(async r => {
-        x++
-        if (x == 1) {
-          console.log(r.items)
-          if (r.items) {
-            if (r.items.length > 0) {
-              if (!r.items[0].hasEntered) {
-                const client = generateClient<Schema>();
+      });
 
-                const { errors, data: result } = await client.models.Todo.update({
-                  id: r.items[0].id,
-                  hasEntered: true,
-                })
+      if (todos) {
+        if (todos.length > 0) {
+          if (!todos[0].hasEntered) {
+            const client = generateClient<Schema>();
 
-                if (result) {
-                  console.log('Can Enter')
-                  this.canEnter = true
-                  this.isLoading = false
-                  this.hideScanner = false
-                } else {
-                  alert('Something went wrong')
-                }
-              } else {
-                console.log('Already used')
-                this.alreadyUsed = true
-                this.isLoading = false
-                this.hideScanner = false
-              }
-            } else {
-              console.log('Invalid Ticket')
-              this.cannotEnter = true
+            const { errors, data: result } = await client.models.Todo.update({
+              id: todos[0].id,
+              hasEntered: true,
+            })
+
+            if (result) {
+              console.log('Can Enter')
+              this.canEnter = true
               this.isLoading = false
               this.hideScanner = false
+            } else {
+              alert('Something went wrong')
             }
           } else {
-            console.log('Invalid Ticket')
-            this.cannotEnter = true
+            console.log('Already used')
+            this.alreadyUsed = true
             this.isLoading = false
             this.hideScanner = false
           }
-          this.scannerStarted = false
+        } else {
+          console.log('Invalid Ticket')
+          this.cannotEnter = true
+          this.isLoading = false
+          this.hideScanner = false
         }
-      });
+      } else {
+        console.log('Invalid Ticket')
+        this.cannotEnter = true
+        this.isLoading = false
+        this.hideScanner = false
+      }
+      this.scannerStarted = false
     }
 
   }

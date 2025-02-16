@@ -36,6 +36,7 @@ export class CodeScannerComponent {
 
   async success(guid: string) {
     console.log(guid)
+    let x = 0
     if (!this.hideScanner) {
       this.isLoading = true
       this.hideScanner = true
@@ -46,41 +47,47 @@ export class CodeScannerComponent {
           guid: { eq: guid }
         }
       }).subscribe(async r => {
-        console.log(r.items)
-        if (r.items) {
-          if (r.items.length > 0) {
-            if (!r.items[0].hasEntered) {
-              const client = generateClient<Schema>();
+        x++
+        if (x == 1) {
+          console.log(r.items)
+          if (r.items) {
+            if (r.items.length > 0) {
+              if (!r.items[0].hasEntered) {
+                const client = generateClient<Schema>();
 
-              const { errors, data: result } = await client.models.Todo.update({
-                id: r.items[0].id,
-                hasEntered: true,
-              })
+                const { errors, data: result } = await client.models.Todo.update({
+                  id: r.items[0].id,
+                  hasEntered: true,
+                })
 
-              if (result) {
-                console.log('Can Enter')
-                this.canEnter = true
-                this.isLoading = false
-
+                if (result) {
+                  console.log('Can Enter')
+                  this.canEnter = true
+                  this.isLoading = false
+                  this.hideScanner = false
+                } else {
+                  alert('Something went wrong')
+                }
               } else {
-                alert('Something went wrong')
+                console.log('Already used')
+                this.alreadyUsed = true
+                this.isLoading = false
+                this.hideScanner = false
               }
             } else {
-              console.log('Already used')
-              this.alreadyUsed = true
+              console.log('Invalid Ticket')
+              this.cannotEnter = true
               this.isLoading = false
-
+              this.hideScanner = false
             }
           } else {
-            console.log('Cannot Enter')
-            // this.cannotEnter = true
+            console.log('Invalid Ticket')
+            this.cannotEnter = true
+            this.isLoading = false
+            this.hideScanner = false
           }
-        } else {
-          console.log('Cannot Enter')
-          // this.cannotEnter = true
+          this.scannerStarted = false
         }
-        this.hideScanner = false
-        this.scannerStarted = false
       });
     }
 

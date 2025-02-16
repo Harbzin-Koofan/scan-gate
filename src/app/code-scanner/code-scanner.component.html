@@ -1,0 +1,37 @@
+<div class="back-overlay">
+    <button mat-mini-fab (click)="back()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+</div>
+
+@if (isLoading) {
+<div class="progress-bar-overlay">
+    Please wait...
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+}
+@if (!hideScanner && scannerStarted) {
+<zxing-scanner [formats]="formats" [enable]="scannerStarted" (scanSuccess)="success($event)"
+    (scanFailure)="failer($event)" (scanError)="error($event)"></zxing-scanner>
+}
+
+@if(canEnter){
+<div class="container can-enter">
+    <h1>Can enter</h1>
+    <button mat-raised-button (click)="nextScan()">Next</button>
+</div>
+}
+
+@if(cannotEnter){
+<div class="container cannot-enter">
+    <h1>Cannot enter</h1>
+    <button mat-raised-button (click)="nextScan()">Next</button>
+</div>
+}
+
+@if(alreadyUsed){
+<div class="container already-used">
+    <h1>Ticket already used</h1>
+    <button mat-raised-button (click)="nextScan()">Next</button>
+</div>
+}

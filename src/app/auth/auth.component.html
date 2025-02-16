@@ -1,0 +1,65 @@
+<div *ngIf="isLoading" class="progress-bar-overlay">
+    Please wait...
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+<div *ngIf="isLogin" class="container">
+    <span>Login</span><br>
+    <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input matInput name="email" [formControl]="loginFormGroup.controls.email" name="number-of-tickets" type="email"
+            placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [formControl]="loginFormGroup.controls.password" name="number-of-tickets" type="password"
+            placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+    <button mat-flat-button (click)="login()">Login</button><br>
+    Don't have an account? <span style="text-decoration: underline; cursor: pointer;" (click)="isSignUp = true;isLogin = false">Sign up</span>
+</div>
+
+<div *ngIf="isSignUp" class="container">
+    <span>Sign up</span><br>
+    <mat-form-field class="example-full-width">
+        <mat-label>First Name</mat-label>
+        <input matInput [formControl]="signUpFormGroup.controls.firstName" name="number-of-tickets" type="text"
+            placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+    
+    <mat-form-field class="example-full-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput [formControl]="signUpFormGroup.controls.lastName" name="number-of-tickets" type="text"
+        placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+    
+    <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input matInput name="email" [formControl]="signUpFormGroup.controls.email" name="number-of-tickets" type="email"
+            placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+    
+    <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [formControl]="signUpFormGroup.controls.password" name="number-of-tickets" type="password"
+        placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+    
+    <mat-form-field class="example-full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput [formControl]="signUpFormGroup.controls.confirmPassword" name="number-of-tickets" type="password"
+        placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+    <button mat-flat-button (click)="onSignUp()">Sign Up</button>
+</div>
+
+<div *ngIf="isVerifyAccount" class="container">
+    <span>Verify your account</span><br>
+    <mat-form-field class="example-full-width">
+        <mat-label>Code</mat-label>
+        <input matInput [formControl]="confirmFormGroup.controls.code" name="number-of-tickets" type="number"
+            placeholder="Enter number of tickets to generate" required>
+    </mat-form-field>
+
+    <button mat-flat-button (click)="verifyAccount()">Verify</button><br>
+</div>

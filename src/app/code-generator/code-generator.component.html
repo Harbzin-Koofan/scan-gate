@@ -1,0 +1,31 @@
+<div *ngIf="isLoading" class="progress-bar-overlay">
+    Please wait...
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+<div class="container">
+    <h1 style="text-align: center;">Kota Hangout Family Vibe<br>Generate Tickets</h1>
+    <div *ngIf="!isTicketsGenerated" class="container" style="height: unset;">
+        <mat-form-field class="example-full-width">
+            <mat-label>Number of tickets</mat-label>
+            <input matInput [formControl]="numberOfTicketsCtr" name="number-of-tickets" type="number"
+                placeholder="Enter number of tickets to generate" required>
+        </mat-form-field>
+        <button mat-flat-button [disabled]="numberOfTicketsCtr.invalid" (click)="generateTicketsCodes()">Generate
+            Tickets</button>
+    </div>
+    <div *ngIf="isTicketsGenerated" style="text-align: center;">
+        <div style="color: green;">{{numberOfTicketsCtr.value}} ticket(s) generated successfully</div><br>
+        <button mat-flat-button [disabled]="numberOfTicketsCtr.invalid"
+            (click)="downloadOutputZip()">Download
+            Tickets</button>
+    </div>
+
+</div>
+<div>
+    <div style="display: none;" *ngFor="let data of qrDataList; let i = index">
+        <qrcode [qrdata]="data" [width]="250" [errorCorrectionLevel]="'M'" [elementType]="'canvas'" #qrCanvas
+            [margin]="1">
+        </qrcode>
+        <p>{{ data }}</p>
+    </div>
+</div>

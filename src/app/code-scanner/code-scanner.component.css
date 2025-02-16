@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    height: 100%;
+    width: 100%;
+}
+
+.can-enter {
+    background-color: green;
+}
+
+.cannot-enter {
+    background-color: red;
+}
+
+.already-used {
+    background-color: red;
+}
+
+.progress-bar-overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    height: 100%;
+    width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: #ffffffe6;
+}
+
+.back-overlay {
+    position: absolute;
+    z-index: 9999;
+    top: 20px;
+    left: 20px;
+}

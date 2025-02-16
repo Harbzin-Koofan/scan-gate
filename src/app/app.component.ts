@@ -8,7 +8,7 @@ import { AuthComponent } from "./auth/auth.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AuthComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

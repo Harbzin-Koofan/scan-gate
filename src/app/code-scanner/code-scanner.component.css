@@ -41,3 +41,8 @@
     top: 20px;
     left: 20px;
 }
+
+::ng-deep video {
+    height: 100vh !important;
+    width: 100vw !important;
+}

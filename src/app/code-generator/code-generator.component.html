@@ -5,6 +5,9 @@
 <div class="container">
     <h1 style="text-align: center;">Kota Hangout Family Vibe<br>Generate Tickets</h1>
     <div *ngIf="!isTicketsGenerated" class="container" style="height: unset;">
+        <mat-checkbox [checked]="isForAdult" (change)="isForAdult = !isForAdult">
+            For adults
+        </mat-checkbox>
         <mat-form-field class="example-full-width">
             <mat-label>Number of tickets</mat-label>
             <input matInput [formControl]="numberOfTicketsCtr" name="number-of-tickets" type="number"
@@ -14,9 +17,8 @@
             Tickets</button>
     </div>
     <div *ngIf="isTicketsGenerated" style="text-align: center;">
-        <div style="color: green;">{{numberOfTicketsCtr.value}} ticket(s) generated successfully</div><br>
-        <button mat-flat-button [disabled]="numberOfTicketsCtr.invalid"
-            (click)="downloadOutputZip()">Download
+        <div style="color: green;">{{qrDataList.length}} ticket(s) generated successfully</div><br>
+        <button mat-flat-button [disabled]="numberOfTicketsCtr.invalid" (click)="downloadOutputZip()">Download
             Tickets</button>
     </div>
 

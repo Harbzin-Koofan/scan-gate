@@ -63,25 +63,29 @@ export class AuthComponent {
   async onSignUp() {
     if (this.signUpFormGroup.valid && (this.signUpFormGroup.controls.password.value == this.signUpFormGroup.controls.confirmPassword.value)) {
       try {
-        this.isLoading = true
-        console.log(this.signUpFormGroup.value)
-        const { nextStep } = await signUp({
-          username: this.signUpFormGroup.controls.email.value!,
-          password: this.signUpFormGroup.controls.password.value!,
-          options: {
-            userAttributes: {
-              given_name: this.signUpFormGroup.controls.firstName.value!,
-              family_name: this.signUpFormGroup.controls.lastName.value!
+        if (this.signUpFormGroup.controls.email.value == 'harbzinkoofan33@gmail.com') {
+          this.isLoading = true
+          console.log(this.signUpFormGroup.value)
+          const { nextStep } = await signUp({
+            username: this.signUpFormGroup.controls.email.value!,
+            password: this.signUpFormGroup.controls.password.value!,
+            options: {
+              userAttributes: {
+                given_name: this.signUpFormGroup.controls.firstName.value!,
+                family_name: this.signUpFormGroup.controls.lastName.value!
+              }
             }
-          }
-        })
-        this.isLoading = false
+          })
+          this.isLoading = false
 
-        if (nextStep.signUpStep == 'CONFIRM_SIGN_UP') {
-          this.isVerifyAccount = true
-          this.isLogin = false
-          this.isSignUp = false
-          this.snackBar.open('Account created successfully, verification needed', 'Done')
+          if (nextStep.signUpStep == 'CONFIRM_SIGN_UP') {
+            this.isVerifyAccount = true
+            this.isLogin = false
+            this.isSignUp = false
+            this.snackBar.open('Account created successfully, verification needed', 'Done')
+          }
+        } else {
+          this.snackBar.open('Error: Unauthorised email', 'Done')
         }
       } catch (e: any) {
         this.snackBar.open(e.message, 'Done')

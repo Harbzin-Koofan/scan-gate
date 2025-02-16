@@ -10,11 +10,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 @Component({
   selector: 'app-code-generator',
-  imports: [MatProgressBarModule, QRCodeComponent, CommonModule, ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatInputModule],
+  imports: [MatCheckboxModule, MatProgressBarModule, QRCodeComponent, CommonModule, ReactiveFormsModule, MatFormFieldModule, MatButtonModule, MatInputModule],
   providers: [DatePipe],
   templateUrl: './code-generator.component.html',
   styleUrl: './code-generator.component.css'
@@ -34,6 +35,7 @@ export class CodeGeneratorComponent {
     this.isLoading = true
     for (let i = 0; i < this.numberOfTicketsCtr.value!; i++) {
       const output = await this.insertUUID()
+      console.log(output)
       if (output.data) {
         const result = output.data
         this.qrDataList.push(result.guid!)
@@ -49,15 +51,18 @@ export class CodeGeneratorComponent {
       let ticketImageUrl
       let xPosition
       let yPosition
+      let size
 
       if(this.isForAdult){
         ticketImageUrl = 'adults.png';
         xPosition = 68
         yPosition = 166
+        size = 218
       }else {
         ticketImageUrl = 'kids.png';
-        xPosition = 0
-        yPosition = 0
+        xPosition = 1744
+        yPosition = 181
+        size = 212
       }
 
       for (let i = 0; i < this.qrDataList.length; i++) {
@@ -80,7 +85,7 @@ export class CodeGeneratorComponent {
         // Draw QR code at the correct position
         const qrX = xPosition; // Adjust X based on QR position
         const qrY = yPosition; // Adjust Y based on QR position
-        const qrSize = 218; // Adjust size based on ticket layout
+        const qrSize = size; // Adjust size based on ticket layout
 
         ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
 

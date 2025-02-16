@@ -94,16 +94,17 @@ export class CodeGeneratorComponent {
           finalCanvas.toBlob((b) => resolve(b!), 'image/png');
         });
 
-        zip.file(`ticket-${i + 1}.png`, blob);
+        zip.file(`${this.isForAdult?'Adult':'Kid'} ticket-${i + 1}.png`, blob);
       }
 
       // Generate and trigger download
       zip.generateAsync({ type: 'blob' }).then((content: string | Blob) => {
         const now = new Date();
         const formattedDateTime = this.datePipe.transform(now, 'EEEE, MMMM d, y h:mm a') || ''
-        saveAs(content, `Kota Hanguout Tickets ${formattedDateTime}.zip`);
+        saveAs(content, `KH ${this.isForAdult?'Adults':'Kids'} Tickets ${formattedDateTime}.zip`);
         this.isTicketsGenerated = false
         this.numberOfTicketsCtr.reset()
+        this.qrDataList = []
       });
 
     }

@@ -47,6 +47,7 @@ export class CodeGeneratorComponent {
 
   async downloadOutputZip() {
     if (this.numberOfTicketsCtr.valid) {
+      this.isForAdult = true
       const zip = new JSZip();
       let ticketImageUrl;
       let xPosition;
@@ -114,6 +115,7 @@ export class CodeGeneratorComponent {
         this.isTicketsGenerated = false;
         this.numberOfTicketsCtr.reset();
         this.qrDataList = [];
+        this.isLoading = false
       });
     }
   }

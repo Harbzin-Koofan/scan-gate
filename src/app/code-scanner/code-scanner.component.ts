@@ -45,7 +45,8 @@ export class CodeScannerComponent {
       const { data: todos, errors } = await client.models.Todo.list({
         filter: {
           guid: { eq: guid }
-        }
+        },
+        limit: 500
       });
 
       if (todos) {
@@ -73,13 +74,13 @@ export class CodeScannerComponent {
             this.hideScanner = false
           }
         } else {
-          console.log('Invalid Ticket')
+          console.log('Invalid Ticket', todos, errors)
           this.cannotEnter = true
           this.isLoading = false
           this.hideScanner = false
         }
       } else {
-        console.log('Invalid Ticket')
+        console.log('Invalid Ticket ', todos, errors)
         this.cannotEnter = true
         this.isLoading = false
         this.hideScanner = false

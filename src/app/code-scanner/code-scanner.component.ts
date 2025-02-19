@@ -46,7 +46,7 @@ export class CodeScannerComponent {
         filter: {
           guid: { eq: guid }
         },
-        limit: 500
+        limit: 1500
       });
 
       if (todos) {
